@@ -1,6 +1,6 @@
 # Anamika Rajput
 
-Personal portfolio for Anamika Rajput, Tech Process Senior Associate at Google Operations Center (Gurugram) since 26 September 2026; previously Quality Analyst at Continuum Global Pvt. Ltd. (CGXI).
+Personal portfolio for Anamika Rajput, Tech Process Senior Associate at Google Operations Center (Gurugram) since September 2026; previously Quality Analyst at Continuum Global Pvt. Ltd. (CGXI).
 
 ## Live — share this URL
 
