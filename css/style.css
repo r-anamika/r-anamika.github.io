@@ -11,6 +11,7 @@
   --font: "Outfit", system-ui, sans-serif;
   --space: 1.25rem;
   --max: 70rem;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 *,
@@ -301,6 +302,13 @@ a {
   align-items: start;
 }
 
+.about-side {
+  justify-self: end;
+  display: grid;
+  gap: 1.5rem;
+  justify-items: end;
+}
+
 .about-photo {
   width: 100%;
   max-width: 22rem;
@@ -308,7 +316,6 @@ a {
   object-fit: cover;
   object-position: center 20%;
   filter: grayscale(1);
-  justify-self: end;
 }
 
 .stats {
@@ -644,8 +651,12 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .about-photo {
+  .about-side {
     justify-self: start;
+    justify-items: start;
+  }
+
+  .about-photo {
     max-width: 18rem;
   }
 
@@ -729,4 +740,240 @@ body.nav-open .backdrop {
   z-index: 25;
   border: 0;
   padding: 0;
+}
+
+
+/* ---------- GOC welcome-kit sticker ---------- */
+
+.sticker {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  max-width: 22rem;
+  padding: 0.7rem 0.7rem 0.3rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.14);
+  transform: rotate(-2.5deg);
+  transition:
+    transform 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+
+.sticker img {
+  width: 100%;
+  height: auto;
+}
+
+.sticker figcaption {
+  padding: 0.55rem 0.15rem 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* A strip of tape, so it reads as pinned up rather than as another photo. */
+.sticker::before {
+  content: "";
+  position: absolute;
+  top: -0.6rem;
+  left: 50%;
+  width: 4.5rem;
+  height: 1.2rem;
+  transform: translateX(-50%) rotate(-1.5deg);
+  background: rgb(249 171 0 / 0.75);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+}
+
+.sticker:hover,
+.sticker:focus-within {
+  transform: rotate(0deg) translateY(-4px) scale(1.015);
+  box-shadow: 0 18px 38px rgb(0 0 0 / 0.2);
+}
+
+/* ---------- scroll progress ---------- */
+
+.progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 3px;
+  z-index: 45;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ---------- reveal on scroll ---------- */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.55s var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Without JS nothing would ever un-hide, so only hide once JS says it can. */
+html:not(.js) [data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- interactive polish ---------- */
+
+.card,
+.tool,
+.stat {
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease),
+    background-color 0.25s var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px rgb(0 0 0 / 0.1);
+}
+
+.tool:hover {
+  transform: translateY(-3px);
+  background: var(--accent);
+  border-color: var(--accent-dark);
+}
+
+.stat:hover {
+  transform: translateY(-3px);
+}
+
+.btn,
+.socials a {
+  transition:
+    transform 0.2s var(--ease),
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+  will-change: transform;
+}
+
+.do-item svg {
+  transition: transform 0.3s var(--ease);
+}
+
+.do-item:hover svg {
+  transform: scale(1.12) rotate(-4deg);
+}
+
+/* ---------- inspector cursor ---------- */
+/* A QA reticle rather than the usual dot-and-ring: the brackets snap to
+   whatever is under the pointer, the way a design tool selects an element. */
+
+.cursor-dot,
+.cursor-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+}
+
+/* Only once the pointer has actually moved — otherwise both park mid-screen. */
+body.cursor-live .cursor-dot,
+body.cursor-live .cursor-box {
+  opacity: 1;
+}
+
+.cursor-dot {
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: var(--accent-dark);
+}
+
+.cursor-box {
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  transition:
+    width 0.22s var(--ease),
+    height 0.22s var(--ease),
+    margin 0.22s var(--ease),
+    opacity 0.2s linear;
+}
+
+.cursor-box i {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--accent-dark);
+}
+
+.cursor-box i:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.cursor-box i:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-left: 0;
+  border-bottom: 0;
+}
+
+.cursor-box i:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  border-right: 0;
+  border-top: 0;
+}
+
+.cursor-box i:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+
+body.cursor-snapped .cursor-dot {
+  opacity: 0;
+}
+
+body.cursor-active {
+  cursor: none;
+}
+
+body.cursor-active a,
+body.cursor-active button,
+body.cursor-active summary {
+  cursor: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticker,
+  .card,
+  .tool,
+  .stat,
+  .btn,
+  .socials a,
+  .do-item svg {
+    transition: none;
+  }
+
+  .sticker:hover,
+  .sticker:focus-within {
+    transform: rotate(-2.5deg);
+  }
 }

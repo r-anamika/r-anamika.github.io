@@ -72,3 +72,161 @@
     sections.forEach((section) => io.observe(section));
   }
 })();
+
+/* ---------- motion ----------
+   Everything below is progressive enhancement: the page is complete without it.
+   `html.js` is what un-hides the reveal targets, so a JS failure leaves the
+   content visible rather than blank. */
+(() => {
+  const root = document.documentElement;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (reduced.matches) return;
+
+  // Reveal on scroll, staggered within each group of siblings.
+  // Driven by the scroll handler below rather than IntersectionObserver: if an
+  // observer never fires, every tagged element stays at opacity 0 and the page
+  // reads as blank. A position check has no such failure mode.
+  const targets = [...document.querySelectorAll("[data-reveal]")];
+  const groups = new Map();
+  targets.forEach((el) => {
+    const parent = el.parentElement;
+    const index = groups.get(parent) ?? 0;
+    groups.set(parent, index + 1);
+    el.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 70}ms`);
+  });
+
+  // Only now hide them — everything above this line is guaranteed to have run.
+  root.classList.add("js");
+
+  let pending = targets;
+  const revealVisible = () => {
+    if (!pending.length) return;
+    const line = innerHeight * 0.88;
+    pending = pending.filter((el) => {
+      if (el.getBoundingClientRect().top > line) return true;
+      el.classList.add("is-in");
+      return false;
+    });
+  };
+
+  // Scroll progress.
+  const progress = document.createElement("div");
+  progress.className = "progress";
+  progress.setAttribute("aria-hidden", "true");
+  document.body.appendChild(progress);
+
+  let ticking = false;
+  const drawProgress = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = max > 0 ? window.scrollY / max : 0;
+    progress.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
+    revealVisible();
+    ticking = false;
+  };
+  addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(drawProgress);
+    },
+    { passive: true }
+  );
+  addEventListener("resize", drawProgress, { passive: true });
+  // A fragment jump (landing on /#about) moves the page without firing scroll,
+  // and late-loading images shift everything, so re-check on both.
+  addEventListener("hashchange", drawProgress);
+  addEventListener("load", drawProgress);
+  drawProgress();
+
+  const fine = window.matchMedia("(pointer: fine)");
+  if (!fine.matches) return;
+
+  // Buttons lean toward the pointer.
+  document.querySelectorAll(".btn, .socials a").forEach((el) => {
+    el.addEventListener("pointermove", (event) => {
+      const rect = el.getBoundingClientRect();
+      const x = (event.clientX - rect.left - rect.width / 2) * 0.18;
+      const y = (event.clientY - rect.top - rect.height / 2) * 0.28;
+      el.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    el.addEventListener("pointerleave", () => {
+      el.style.transform = "";
+    });
+  });
+
+  // Inspector cursor: a dot that tracks the pointer and a bracket frame that
+  // snaps onto whatever is under it, the way a design tool selects an element.
+  const SNAP = "a, button, .card, .tool, .stat, .do-item, .sticker, .timeline li";
+  const dot = document.createElement("div");
+  dot.className = "cursor-dot";
+  dot.setAttribute("aria-hidden", "true");
+  const box = document.createElement("div");
+  box.className = "cursor-box";
+  box.setAttribute("aria-hidden", "true");
+  box.innerHTML = "<i></i><i></i><i></i><i></i>";
+  document.body.append(dot, box);
+  document.body.classList.add("cursor-active");
+
+
+  const pointer = { x: innerWidth / 2, y: innerHeight / 2 };
+  const frame = { x: pointer.x, y: pointer.y };
+  let snapped = null;
+  let live = false;
+
+  addEventListener(
+    "pointermove",
+    (event) => {
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      if (!live) {
+        live = true;
+        frame.x = pointer.x;
+        frame.y = pointer.y;
+        document.body.classList.add("cursor-live");
+      }
+      dot.style.transform = `translate3d(${pointer.x}px, ${pointer.y}px, 0)`;
+
+      const hit = event.target instanceof Element ? event.target.closest(SNAP) : null;
+      if (hit !== snapped) {
+        snapped = hit;
+        document.body.classList.toggle("cursor-snapped", Boolean(hit));
+        if (!hit) {
+          box.style.width = "";
+          box.style.height = "";
+          box.style.margin = "";
+        }
+      }
+      if (hit) {
+        const rect = hit.getBoundingClientRect();
+        const w = rect.width + 14;
+        const h = rect.height + 14;
+        box.style.width = `${w}px`;
+        box.style.height = `${h}px`;
+        box.style.margin = `${-h / 2}px 0 0 ${-w / 2}px`;
+      }
+    },
+    { passive: true }
+  );
+
+  // The frame eases toward its mark; when snapped it parks on the element.
+  const tick = () => {
+    let tx = pointer.x;
+    let ty = pointer.y;
+    if (snapped) {
+      const rect = snapped.getBoundingClientRect();
+      tx = rect.left + rect.width / 2;
+      ty = rect.top + rect.height / 2;
+    }
+    frame.x += (tx - frame.x) * (snapped ? 0.22 : 0.16);
+    frame.y += (ty - frame.y) * (snapped ? 0.22 : 0.16);
+    box.style.transform = `translate3d(${frame.x}px, ${frame.y}px, 0)`;
+    requestAnimationFrame(tick);
+  };
+  tick();
+
+  addEventListener("pointerdown", () => box.style.setProperty("opacity", "0.55"));
+  addEventListener("pointerup", () => box.style.removeProperty("opacity"));
+  document.addEventListener("pointerleave", () => box.style.setProperty("opacity", "0"));
+  document.addEventListener("pointerenter", () => box.style.removeProperty("opacity"));
+})();

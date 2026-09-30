@@ -1,3 +1,6 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# shadcn MCP tooling — dev only, never served by Pages
+node_modules/
