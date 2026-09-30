@@ -63,9 +63,9 @@ RESUME = {
             "bullets": [
                 "Led end-to-end email campaign testing, from build verification (smoke and sanity) "
                 "through final pre-send checks, so every campaign shipped stable and accurate.",
-                "Ran functionality, content, and regression testing on templates, validating links, "
-                "CTAs, tracking parameters, personalization fields, dynamic content logic, and "
-                "legal and brand copy before launch.",
+                "Ran functionality, content, regression, and A/B acceptance testing on templates "
+                "and their variants, validating links, CTAs, tracking parameters, personalization "
+                "fields, dynamic content logic, and legal and brand copy before launch.",
                 "Used Gamma, Litmus, GNP, and an in-house analyzer to run automated and manual "
                 "cross-client and cross-device passes for consistent rendering on major email "
                 "clients, browsers, and devices.",
@@ -75,15 +75,26 @@ RESUME = {
                 "Checked every URL for redirection and analytics accuracy, covering landing pages, "
                 "UTMs, click tracking, unsubscribe, and preference-center links.",
                 "Conducted ADA accessibility and usability testing, improving readability, keyboard "
-                "navigation, color contrast, and alt text, then retested fixes for send sign-off.",
-                "Supported A/B and acceptance testing across template variants, documenting defects "
-                "and obtaining stakeholder sign-off ahead of send.",
+                "navigation, color contrast, and alt text, then documented defects and retested "
+                "fixes for stakeholder sign-off.",
+            ],
+        },
+        {
+            "title": "Internship Trainee",
+            "org": "QSpiders — Software Testing Training Institute · Gurugram",
+            "when": "Oct 2023 — Mar 2024",
+            "bullets": [
+                "Six-month full-time training in manual and automation testing: test case design, "
+                "execution, and defect reporting, working with Selenium WebDriver, Java, and web "
+                "technologies.",
             ],
         },
     ],
     "education": [
-        ("Master of Computer Application", "Aligarh College of Engineering and Technology", "2022 — 2024"),
-        ("Bachelor of Computer Application", "Aligarh College of Engineering and Technology", "2018 — 2021"),
+        ("Master of Computer Applications",
+         "Aligarh College of Engineering and Technology · Dr. A.P.J. Abdul Kalam Technical University",
+         "2022 — 2024"),
+        ("Bachelor of Computer Applications", "Aligarh College of Engineering and Technology", "2018 — 2021"),
     ],
     "skills": [
         "Java", "Python", "API Testing", "Manual Testing", "Software Testing", "Selenium WebDriver",
@@ -93,8 +104,8 @@ RESUME = {
         "QAT (Quality Analyzer Tool)", "Link Validator", "Diff Checker", "ADA compliance",
     ],
     "certifications": [
-        ("Black & White Box Testing", "University of Minnesota", "Sep 2023"),
-        ("Python Programming Fundamentals", "YBI Foundation", "Sep 2023"),
+        ("Black-box and White-box Testing", "University of Minnesota", "Sep 2023"),
+        ("Python Programming Fundamentals", "YBI Foundation · ID 78790BJR8XF6N", "Sep 2023"),
         ("Selenium WebDriver with Java", "Udemy — basics to advanced frameworks", "Nov 2023"),
     ],
     "languages": ["English", "Hindi"],
