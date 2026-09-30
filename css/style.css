@@ -21,6 +21,7 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -182,6 +183,7 @@ a {
 
 .hero {
   min-height: 100vh;
+  min-height: 100svh;
   display: grid;
   grid-template-columns: minmax(18rem, 1fr) minmax(16rem, 1fr);
   background: var(--white);
@@ -274,6 +276,7 @@ a {
 
 .hero-photo {
   min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
   background: #2a2a2a;
 }
@@ -281,7 +284,7 @@ a {
 .hero-photo img {
   width: 100%;
   height: 100%;
-  min-height: 100vh;
+  min-height: 100svh;
   object-fit: cover;
   object-position: center 18%;
   filter: grayscale(1);
@@ -547,6 +550,7 @@ a {
 .contact-list span {
   display: block;
   text-decoration: none;
+  overflow-wrap: anywhere;
 }
 
 .contact-list strong {
@@ -602,10 +606,10 @@ a {
   }
 
   body.nav-open {
-  overflow: hidden;
-}
+    overflow: hidden;
+  }
 
-body.nav-open .sidebar {
+  body.nav-open .sidebar {
     transform: none;
   }
 
@@ -636,11 +640,7 @@ body.nav-open .sidebar {
   }
 
   .about-grid,
-  .resume-grid,
-  .work-grid,
-  .tool-grid,
-  .contact-list,
-  .do-list {
+  .resume-grid {
     grid-template-columns: 1fr;
   }
 
@@ -649,12 +649,14 @@ body.nav-open .sidebar {
     max-width: 18rem;
   }
 
-  .work-grid {
-    grid-template-columns: 1fr 1fr;
+  .work-grid,
+  .tool-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .tool-grid {
-    grid-template-columns: 1fr 1fr;
+  .nav-link {
+    display: block;
+    padding: 0.6rem 0;
   }
 
   .btn-ghost {
@@ -670,15 +672,31 @@ body.nav-open .sidebar {
 }
 
 @media (max-width: 640px) {
-  .stats,
   .work-grid,
-  .tool-grid {
+  .contact-list,
+  .do-list {
     grid-template-columns: 1fr;
   }
 
   .hero-photo,
   .hero-photo img {
     min-height: 22rem;
+  }
+}
+
+/* Narrowest phones: stacking the last two-up grids beats cramped text. */
+@media (max-width: 400px) {
+  .stats,
+  .tool-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 3rem 1.15rem;
+  }
+
+  .hero-copy {
+    padding: 5rem 1.15rem 2.25rem;
   }
 }
 
