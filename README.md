@@ -20,6 +20,18 @@ python -m http.server 8081
 
 Then visit `http://localhost:8081`.
 
+## Résumé
+
+`assets/resume/Anamika-Rajput-Resume.pdf` is generated, not hand-edited. Change the facts in
+`tools/build_resume.py` and rebuild:
+
+```bash
+pip install reportlab && python tools/build_resume.py
+```
+
+The script refuses to write a PDF whose content spills past page one, so the résumé stays a
+one-pager. Keep its job titles and dates in step with `index.html` — they are the same facts.
+
 ## Notes
 
 - `index.html` carries three absolute URLs (`canonical`, `og:url`, `og:image`) pointing at the root domain. Everything else uses relative paths.
