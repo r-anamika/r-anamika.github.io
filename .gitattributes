@@ -1,0 +1,17 @@
+# Git guessed this PDF was text (it has no NUL bytes early on) and warned it would
+# rewrite LF to CRLF, which corrupts the file on checkout. Pin the binary types.
+*.pdf   binary
+*.jpg   binary
+*.jpeg  binary
+*.png   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+
+# Keep the web sources LF in the repo regardless of the local autocrlf setting.
+*.html  text eol=lf
+*.css   text eol=lf
+*.js    text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+*.py    text eol=lf
