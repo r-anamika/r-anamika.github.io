@@ -155,6 +155,27 @@
     });
   });
 
+  // The sticker tilts in 3D toward the pointer and carries a gloss with it.
+  const sticker = document.querySelector(".sticker");
+  if (sticker) {
+    const REST = "rotate(-2.5deg)";
+    sticker.addEventListener("pointermove", (event) => {
+      const rect = sticker.getBoundingClientRect();
+      const px = (event.clientX - rect.left) / rect.width;
+      const py = (event.clientY - rect.top) / rect.height;
+      sticker.classList.add("is-tilting");
+      sticker.style.setProperty("--mx", `${px * 100}%`);
+      sticker.style.setProperty("--my", `${py * 100}%`);
+      sticker.style.transform =
+        `perspective(900px) rotateX(${(0.5 - py) * 12}deg) ` +
+        `rotateY(${(px - 0.5) * 14}deg) rotate(-1deg) scale(1.03)`;
+    });
+    sticker.addEventListener("pointerleave", () => {
+      sticker.classList.remove("is-tilting");
+      sticker.style.transform = REST;
+    });
+  }
+
   // Inspector cursor: a dot that tracks the pointer and a bracket frame that
   // snaps onto whatever is under it, the way a design tool selects an element.
   const SNAP = "a, button, .card, .tool, .stat, .do-item, .sticker, .timeline li";

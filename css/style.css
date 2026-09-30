@@ -302,13 +302,6 @@ a {
   align-items: start;
 }
 
-.about-side {
-  justify-self: end;
-  display: grid;
-  gap: 1.5rem;
-  justify-items: end;
-}
-
 .about-photo {
   width: 100%;
   max-width: 22rem;
@@ -316,6 +309,7 @@ a {
   object-fit: cover;
   object-position: center 20%;
   filter: grayscale(1);
+  justify-self: end;
 }
 
 .stats {
@@ -651,12 +645,8 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .about-side {
-    justify-self: start;
-    justify-items: start;
-  }
-
   .about-photo {
+    justify-self: start;
     max-width: 18rem;
   }
 
@@ -744,20 +734,33 @@ body.nav-open .backdrop {
 
 
 /* ---------- GOC welcome-kit sticker ---------- */
+/* Lives at the foot of the Education column, across from the GOC role, where
+   it fills the gap that column otherwise leaves under the Experience list. */
+
+ /* The wrapper owns the reveal so its translate cannot cancel the tilt below. */
+.sticker-wrap {
+  margin-top: 3rem;
+}
 
 .sticker {
   position: relative;
   margin: 0;
   width: 100%;
-  max-width: 22rem;
+  max-width: 20rem;
   padding: 0.7rem 0.7rem 0.3rem;
   background: var(--white);
   border: 1px solid var(--line);
   box-shadow: 0 10px 24px rgb(0 0 0 / 0.14);
   transform: rotate(-2.5deg);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* The pointer drives the tilt, so only the return to rest is eased. */
+.sticker:not(.is-tilting) {
   transition:
-    transform 0.35s var(--ease),
-    box-shadow 0.35s var(--ease);
+    transform 0.5s var(--ease),
+    box-shadow 0.4s var(--ease);
 }
 
 .sticker img {
@@ -785,12 +788,34 @@ body.nav-open .backdrop {
   transform: translateX(-50%) rotate(-1.5deg);
   background: rgb(249 171 0 / 0.75);
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+  z-index: 2;
 }
 
-.sticker:hover,
+/* Gloss that follows the pointer across the card as it tilts. */
+.sticker::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease);
+  background: radial-gradient(
+    22rem circle at var(--mx, 50%) var(--my, 50%),
+    rgb(255 255 255 / 0.5),
+    rgb(255 255 255 / 0) 55%
+  );
+}
+
+.sticker:hover {
+  box-shadow: 0 26px 46px rgb(0 0 0 / 0.24);
+}
+
+.sticker:hover::after {
+  opacity: 1;
+}
+
 .sticker:focus-within {
-  transform: rotate(0deg) translateY(-4px) scale(1.015);
-  box-shadow: 0 18px 38px rgb(0 0 0 / 0.2);
+  transform: rotate(0deg) scale(1.02);
 }
 
 /* ---------- scroll progress ---------- */
@@ -962,6 +987,10 @@ body.cursor-active summary {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .sticker::after {
+    display: none;
+  }
+
   .sticker,
   .card,
   .tool,
