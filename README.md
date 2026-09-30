@@ -1,6 +1,6 @@
 # Anamika Rajput
 
-Personal portfolio for Anamika Rajput, Quality Analyst at Continuum Global Pvt. Ltd. (CGXI), joining Google Operations Center on 26 September 2026.
+Personal portfolio for Anamika Rajput, Quality Analyst at Continuum Global Pvt. Ltd. (CGXI), joining Google Operations Center as Tech Process Senior Associate on 26 September 2026.
 
 ## Live — share this URL
 
